@@ -2,13 +2,14 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Search, Filter, MapPin, UtensilsCrossed, Scissors, ShoppingBag, Calendar, Music } from "lucide-react";
 import { Input } from "@/components/ui/input";
+import { Link } from "react-router-dom";
 
 const categories = [
-  { icon: UtensilsCrossed, label: "Restaurants", count: 250 },
-  { icon: ShoppingBag, label: "Épiceries", count: 120 },
-  { icon: Scissors, label: "Salons", count: 80 },
-  { icon: Calendar, label: "Événements", count: 45 },
-  { icon: Music, label: "Bars & Clubs", count: 60 },
+  { icon: UtensilsCrossed, label: "Restaurants", count: 250, path: "/restaurants" },
+  { icon: ShoppingBag, label: "Épiceries", count: 120, path: "/groceries" },
+  { icon: Scissors, label: "Salons", count: 80, path: "/salons" },
+  { icon: Calendar, label: "Événements", count: 45, path: "/events" },
+  { icon: Music, label: "Bars & Clubs", count: 60, path: "/bars-clubs" },
 ];
 
 const countries = [
@@ -44,14 +45,15 @@ const FilterSection = () => {
             </div>
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-4">
               {categories.map((category) => (
-                <button
-                  key={category.label}
-                  className="p-4 rounded-xl border border-border bg-background hover:border-primary hover:shadow-warm transition-smooth group"
-                >
-                  <category.icon className="w-8 h-8 text-primary mb-2 group-hover:scale-110 transition-transform" />
-                  <div className="text-sm font-semibold text-foreground">{category.label}</div>
-                  <div className="text-xs text-muted-foreground mt-1">{category.count} lieux</div>
-                </button>
+                <Link key={category.label} to={category.path}>
+                  <button
+                    className="p-4 rounded-xl border border-border bg-background hover:border-primary hover:shadow-warm transition-smooth group w-full"
+                  >
+                    <category.icon className="w-8 h-8 text-primary mb-2 group-hover:scale-110 transition-transform" />
+                    <div className="text-sm font-semibold text-foreground">{category.label}</div>
+                    <div className="text-xs text-muted-foreground mt-1">{category.count} lieux</div>
+                  </button>
+                </Link>
               ))}
             </div>
           </div>

@@ -11,8 +11,9 @@ const places = [
     rating: 4.8,
     reviews: 245,
     address: "Paris 18ème",
-    image: "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=400&h=300&fit=crop",
+    image: "https://images.unsplash.com/photo-1555939594-58d7cb561ad1?w=800&auto=format&fit=crop",
     open: true,
+    website: "https://maps.google.com/?q=Le+Petit+Dakar+Paris",
   },
   {
     id: 2,
@@ -22,8 +23,9 @@ const places = [
     rating: 4.9,
     reviews: 189,
     address: "Paris 11ème",
-    image: "https://images.unsplash.com/photo-1560066984-138dadb4c035?w=400&h=300&fit=crop",
+    image: "https://images.unsplash.com/photo-1560066984-138dadb4c035?w=800&auto=format&fit=crop",
     open: true,
+    website: "https://maps.google.com/?q=Afro+Beauty+Paris",
   },
   {
     id: 3,
@@ -33,19 +35,21 @@ const places = [
     rating: 4.7,
     reviews: 156,
     address: "Montreuil",
-    image: "https://images.unsplash.com/photo-1542838132-92c53300491e?w=400&h=300&fit=crop",
+    image: "https://images.unsplash.com/photo-1542838132-92c53300491e?w=800&auto=format&fit=crop",
     open: false,
+    website: "https://maps.google.com/?q=Marché+Tropical+Montreuil",
   },
   {
     id: 4,
     name: "Chez Mama Afrika",
     category: "Restaurant",
     country: "Congo",
-    rating: 4.6,
+    rating: 4.8,
     reviews: 203,
     address: "Paris 19ème",
-    image: "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=400&h=300&fit=crop",
+    image: "https://images.unsplash.com/photo-1414235077428-338989a2e8c0?w=800&auto=format&fit=crop",
     open: true,
+    website: "https://maps.google.com/?q=Chez+Mama+Afrika+Paris",
   },
 ];
 
@@ -65,10 +69,15 @@ const FeaturedPlaces = () => {
 
           <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
             {places.map((place) => (
-              <Card 
-                key={place.id} 
-                className="overflow-hidden cursor-pointer hover:shadow-warm transition-smooth hover:-translate-y-2 group border-border/50"
+              <a 
+                key={place.id}
+                href={place.website}
+                target="_blank"
+                rel="noopener noreferrer"
               >
+                <Card 
+                  className="overflow-hidden cursor-pointer hover:shadow-warm transition-smooth hover:-translate-y-2 group border-border/50"
+                >
                 <div className="relative h-48 overflow-hidden">
                   <img 
                     src={place.image} 
@@ -108,6 +117,7 @@ const FeaturedPlaces = () => {
                   </div>
                 </CardContent>
               </Card>
+              </a>
             ))}
           </div>
         </div>

@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { MapPin, Search } from "lucide-react";
 import heroImage from "@/assets/hero-image.jpg";
+import { Link } from "react-router-dom";
 
 const Hero = () => {
   return (
@@ -36,29 +37,38 @@ const Hero = () => {
 
           {/* CTA Buttons */}
           <div className="flex flex-col sm:flex-row gap-4 justify-center items-center pt-4">
-            <Button variant="hero" size="xl" className="group">
+            <Button 
+              variant="hero" 
+              size="xl" 
+              className="group"
+              onClick={() => {
+                document.getElementById('map-section')?.scrollIntoView({ behavior: 'smooth' });
+              }}
+            >
               <Search className="w-5 h-5 group-hover:rotate-12 transition-transform" />
               Explorer la carte
             </Button>
-            <Button variant="outline" size="xl" className="bg-white/10 backdrop-blur-sm border-white/30 text-white hover:bg-white/20">
-              Ajouter mon commerce
-            </Button>
+            <Link to="/auth">
+              <Button variant="outline" size="xl" className="bg-white/10 backdrop-blur-sm border-white/30 text-white hover:bg-white/20">
+                Se connecter
+              </Button>
+            </Link>
           </div>
 
           {/* Stats */}
           <div className="grid grid-cols-3 gap-8 pt-12 max-w-2xl mx-auto">
-            <div className="space-y-1">
+            <Link to="/places" className="space-y-1 hover:scale-105 transition-transform cursor-pointer">
               <div className="text-3xl md:text-4xl font-bold text-white">500+</div>
               <div className="text-sm md:text-base text-white/70">Lieux référencés</div>
-            </div>
-            <div className="space-y-1">
+            </Link>
+            <Link to="/countries" className="space-y-1 hover:scale-105 transition-transform cursor-pointer">
               <div className="text-3xl md:text-4xl font-bold text-white">54</div>
               <div className="text-sm md:text-base text-white/70">Pays africains</div>
-            </div>
-            <div className="space-y-1">
+            </Link>
+            <Link to="/users" className="space-y-1 hover:scale-105 transition-transform cursor-pointer">
               <div className="text-3xl md:text-4xl font-bold text-white">10K+</div>
               <div className="text-sm md:text-base text-white/70">Utilisateurs</div>
-            </div>
+            </Link>
           </div>
         </div>
       </div>
