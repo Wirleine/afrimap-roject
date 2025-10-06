@@ -23,10 +23,10 @@ const Hero = () => {
           </div>
 
           {/* Main Heading */}
-          <h1 className="text-5xl md:text-7xl font-bold leading-tight">
-            <span className="text-white">Vivre l'Afrique,</span>
+          <h1 className="text-5xl md:text-7xl font-bold text-white leading-tight">
+            Vivre l'Afrique,
             <br />
-            <span className="text-primary-glow">même en France</span>
+            même en France
           </h1>
 
           {/* Subheading */}
