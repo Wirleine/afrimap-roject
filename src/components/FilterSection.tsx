@@ -3,13 +3,24 @@ import { Badge } from "@/components/ui/badge";
 import { Search, Filter, MapPin, UtensilsCrossed, Scissors, ShoppingBag, Calendar, Music } from "lucide-react";
 import { Input } from "@/components/ui/input";
 import { Link } from "react-router-dom";
+import { useQuery } from "@tanstack/react-query";
+import { supabase } from "@/integrations/supabase/client";
+import { useToast } from "@/hooks/use-toast";
+
+const categoryMap: { [key: string]: string } = {
+  "Restaurants": "restaurant",
+  "Épiceries": "grocery",
+  "Salons": "salon",
+  "Événements": "event",
+  "Bars & Clubs": "bar_club"
+};
 
 const categories = [
-  { icon: UtensilsCrossed, label: "Restaurants", count: 250, path: "/restaurants" },
-  { icon: ShoppingBag, label: "Épiceries", count: 120, path: "/groceries" },
-  { icon: Scissors, label: "Salons", count: 80, path: "/salons" },
-  { icon: Calendar, label: "Événements", count: 45, path: "/events" },
-  { icon: Music, label: "Bars & Clubs", count: 60, path: "/bars-clubs" },
+  { icon: UtensilsCrossed, label: "Restaurants", path: "/restaurants", dbCategory: "restaurant" },
+  { icon: ShoppingBag, label: "Épiceries", path: "/groceries", dbCategory: "grocery" },
+  { icon: Scissors, label: "Salons", path: "/salons", dbCategory: "salon" },
+  { icon: Calendar, label: "Événements", path: "/events", dbCategory: "event" },
+  { icon: Music, label: "Bars & Clubs", path: "/bars-clubs", dbCategory: "bar_club" },
 ];
 
 const countries = [
@@ -17,6 +28,52 @@ const countries = [
 ];
 
 const FilterSection = () => {
+  const { toast } = useToast();
+
+  const { data: categoryCounts = {} } = useQuery({
+    queryKey: ["category-counts"],
+    queryFn: async () => {
+      const counts: { [key: string]: number } = {};
+      
+      for (const category of categories) {
+        const { count } = await supabase
+          .from("places")
+          .select("*", { count: "exact", head: true })
+          .eq("category", category.dbCategory as "restaurant" | "grocery" | "salon" | "event" | "bar_club");
+        counts[category.label] = count || 0;
+      }
+      
+      return counts;
+    }
+  });
+
+  const handleNearMe = () => {
+    if ("geolocation" in navigator) {
+      navigator.geolocation.getCurrentPosition(
+        (position) => {
+          toast({
+            title: "Position trouvée",
+            description: `Latitude: ${position.coords.latitude}, Longitude: ${position.coords.longitude}`
+          });
+          // TODO: Filtrer les lieux par distance
+        },
+        (error) => {
+          toast({
+            title: "Erreur de géolocalisation",
+            description: "Impossible d'accéder à votre position",
+            variant: "destructive"
+          });
+        }
+      );
+    } else {
+      toast({
+        title: "Géolocalisation non disponible",
+        description: "Votre navigateur ne supporte pas la géolocalisation",
+        variant: "destructive"
+      });
+    }
+  };
+
   return (
     <section className="py-16 bg-card">
       <div className="container mx-auto px-4">
@@ -28,7 +85,12 @@ const FilterSection = () => {
               placeholder="Rechercher un restaurant, salon, événement..." 
               className="pl-12 pr-4 h-14 text-base shadow-warm border-border/50"
             />
-            <Button variant="hero" size="lg" className="absolute right-2 top-1/2 -translate-y-1/2">
+            <Button 
+              variant="hero" 
+              size="lg" 
+              className="absolute right-2 top-1/2 -translate-y-1/2"
+              onClick={handleNearMe}
+            >
               <MapPin className="w-4 h-4" />
               Près de moi
             </Button>
@@ -51,7 +113,7 @@ const FilterSection = () => {
                   >
                     <category.icon className="w-8 h-8 text-primary mb-2 group-hover:scale-110 transition-transform" />
                     <div className="text-sm font-semibold text-foreground">{category.label}</div>
-                    <div className="text-xs text-muted-foreground mt-1">{category.count} lieux</div>
+                    <div className="text-xs text-muted-foreground mt-1">{categoryCounts[category.label] || 0} lieux</div>
                   </button>
                 </Link>
               ))}
